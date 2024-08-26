@@ -1,0 +1,35 @@
+####################### question A #######################################
+
+UPDATE employee_job_table
+SET job_id = 4, effective_date = '2020-01-01'
+WHERE employee_id = (
+    SELECT employee_id FROM employee_profile_table WHERE employee_no = 1002
+);
+
+####################### question B #######################################
+
+SELECT ep.employee_name, ep.employee_no, ej.effective_date, jp.job_name
+FROM employee_profile_table ep
+JOIN employee_job_table ej ON ep.employee_id = ej.employee_id
+JOIN job_profile_table jp ON ej.job_id = jp.job_id;
+
+
+####################### question C #######################################
+
+SELECT ep.employee_name, ep.employee_no, jp.job_name
+FROM employee_profile_table ep
+JOIN employee_job_table ej ON ep.employee_id = ej.employee_id
+JOIN job_profile_table jp ON ej.job_id = jp.job_id
+WHERE ej.effective_date = (
+    SELECT MAX(effective_date)
+    FROM employee_job_table ej2
+    WHERE ej2.employee_id = ep.employee_id
+);
+
+####################### question D #######################################
+
+DELETE FROM employee_job_table
+WHERE employee_id = (
+    SELECT employee_id FROM employee_profile_table WHERE employee_no = 1000
+)
+AND effective_date = '2020-01-01';
